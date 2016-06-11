@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IndieDish Test Angular</title>
+	<meta charset="utf-8">
+	<meta name="author" content="BioMaRu">
+	<meta name="description" content="IndieDish Test">
+	<link href="stype.css" rel="stylesheet">
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myController">
+	
+	<h2>IndieDish test - using only angularJS without using of other html, css and js library</h2>
+	
+	<form ng-submit="addItem()">
+		<input type="text" placeholder="Enter your text here" ng-model="inputValue">
+	</form>
+	
+	<div id="list-container">
+		<div class="list" 
+			 ng-repeat="item in myList track by $index" 
+			 ng-click="clickItem(item, $index)"
+			 ng-class="{ 'active': selectItem == $index }">
+			<div class="item">{{ item }}</div>
+			<div class="close" ng-click="removeItem($index, $event)">X</div>
+		</div>
+		
+	</div>
+	
+	<script>
+		angular.module('myApp',[]).controller('myController',function($scope){
+			$scope.myList = [
+				"Ant", 
+				"<strong>123</strong>", 
+				"Cat"
+			]
+			$scope.selectItem = -1;
+			$scope.inputValue = '';
+			angular.element(document).ready(function(){
+				console.log('AAAA')
+			})
+			$scope.addItem = function(){
+				if( $scope.inputValue !== '' ) {
+					$scope.myList.push($scope.inputValue);
+					$scope.inputValue = '';
+					console.log($scope.myList);
+				}
+			}
+			$scope.removeItem = function(index, event) {
+				event.stopPropagation();
+				$scope.myList.splice(index,1);
+				if( $scope.selectItem > index ){
+					$scope.selectItem--;
+				}
+				else if($scope.myList.length == 0 || $scope.selectItem == index){
+					$scope.selectItem = -1;
+				}
+				console.log($scope.myList);
+			}
+			$scope.clickItem = function(item, index) {
+				$scope.selectItem = index;
+				setTimeout(function(){ alert(item) }, 50);	
+			}
+		})
+	</script>
+</body>
+</html>
